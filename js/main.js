@@ -2,8 +2,8 @@
  * ============================================================================
  * MAIN APPLICATION CONTROLLER & SCENE ROUTER
  * ============================================================================
- * Coordinates scenes 0 through 7, lazy-initializes upon countdown unlock,
- * handles accessible navigation, star interactions, and keyboard shortcuts.
+ * Coordinates scenes 0 through 6, handles accessible navigation,
+ * star interactions, and keyboard shortcuts.
  */
 
 class SkyApp {
@@ -22,21 +22,21 @@ class SkyApp {
     this.audioBtn = document.getElementById('audio-toggle-btn');
     this.bindAudioToggle();
 
-    // Lock Manager (Scene -1)
-    this.lockManager = new SkyLockManager(this.starfield, () => {
-      this.initMainExperience();
-    });
-
     this.bindGlobalKeyboard();
+
+    // Start experience immediately
+    this.initMainExperience();
   }
 
   // ==========================================================================
-  // LAZY INITIALIZATION (ONLY AFTER UNLOCK)
+  // INITIALIZATION
   // ==========================================================================
 
   initMainExperience() {
     const mainApp = document.getElementById('main-experience');
-    mainApp.classList.remove('hidden');
+    if (mainApp) {
+      mainApp.classList.remove('hidden');
+    }
 
     this.renderHeaderNav();
 
@@ -64,7 +64,6 @@ class SkyApp {
       `${SKY_CONFIG.age} Stars`,
       "Ancient Light",
       "Zodiac Sky",
-      "Make a Wish",
       "The Telescope",
       "Final Message"
     ];
@@ -136,7 +135,7 @@ class SkyApp {
       }
 
       if (e.key === 'ArrowRight') {
-        if (this.currentScene < 7) {
+        if (this.currentScene < 6) {
           this.goToScene(this.currentScene + 1);
         }
       } else if (e.key === 'ArrowLeft') {
@@ -148,12 +147,7 @@ class SkyApp {
   }
 
   goToScene(sceneIndex) {
-    if (sceneIndex < 0 || sceneIndex > 7) return;
-
-    // Clean up previous scene if necessary
-    if (this.currentScene === 5 && sceneIndex !== 5) {
-      this.gameManager.stopShootingStarGame();
-    }
+    if (sceneIndex < 0 || sceneIndex > 6) return;
 
     this.currentScene = sceneIndex;
     this.maxSceneReached = Math.max(this.maxSceneReached, sceneIndex);
@@ -192,13 +186,10 @@ class SkyApp {
         this.mountScene4_Zodiac();
         break;
       case 5:
-        this.mountScene5_WishGame();
+        this.mountScene5_Telescope();
         break;
       case 6:
-        this.mountScene6_Telescope();
-        break;
-      case 7:
-        this.mountScene7_FinalMessage();
+        this.mountScene6_FinalMessage();
         break;
     }
   }
@@ -602,7 +593,7 @@ class SkyApp {
 
         <div class="scene-actions">
           <button class="celestial-btn primary-btn" id="zodiac-next-btn">
-            Make A Wish →
+            Explore The Telescope →
           </button>
         </div>
       </div>
@@ -622,36 +613,11 @@ class SkyApp {
   }
 
   // ==========================================================================
-  // SCENE 5: MAKE A WISH
+  // SCENE 5: THE TELESCOPE
   // ==========================================================================
 
-  mountScene5_WishGame() {
+  mountScene5_Telescope() {
     const scene = document.getElementById('scene-5');
-    if (!scene) return;
-
-    scene.innerHTML = `
-      <div class="wish-scene-wrapper">
-        <div class="wish-header">
-          <div class="section-badge">Interactive Starlight</div>
-          <h2 class="scene-title">Catch A Shooting Star</h2>
-          <p class="scene-subtext">Touch a passing shooting star to make a private wish. Three wishes can be sent wandering.</p>
-        </div>
-        <div class="wish-game-container" id="wish-game-container"></div>
-      </div>
-    `;
-
-    const gameContainer = scene.querySelector('#wish-game-container');
-    this.gameManager.startShootingStarGame(gameContainer, () => {
-      this.goToScene(6);
-    });
-  }
-
-  // ==========================================================================
-  // SCENE 6: THE TELESCOPE
-  // ==========================================================================
-
-  mountScene6_Telescope() {
-    const scene = document.getElementById('scene-6');
     if (!scene) return;
 
     scene.innerHTML = `
@@ -667,16 +633,16 @@ class SkyApp {
 
     const container = scene.querySelector('#telescope-container');
     this.gameManager.initTelescope(container, () => {
-      this.goToScene(7);
+      this.goToScene(6);
     });
   }
 
   // ==========================================================================
-  // SCENE 7: FINAL MESSAGE
+  // SCENE 6: FINAL MESSAGE
   // ==========================================================================
 
-  mountScene7_FinalMessage() {
-    const scene = document.getElementById('scene-7');
+  mountScene6_FinalMessage() {
+    const scene = document.getElementById('scene-6');
     if (!scene) return;
 
     const data = SKY_CONFIG.finalMessage;

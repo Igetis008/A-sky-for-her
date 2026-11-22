@@ -17,28 +17,7 @@ const SKY_CONFIG = {
   birthdayDisplay: "December 22", // Human-friendly display string
 
   // --------------------------------------------------------------------------
-  // 2. SCENE -1: COUNTDOWN LOCK SETTINGS
-  // --------------------------------------------------------------------------
-  // ISO 8601 string WITH explicit UTC offset (e.g. +05:30). Never omit offset.
-  unlockAt: "2025-12-22T00:00:00+05:30",
-
-  // Secret preview key to bypass the countdown lock anytime for testing:
-  // Open your browser at: index.html?preview=Sujal-preview
-  previewKey: "secret123",
-
-  // Playful teaser lines shown when she taps the sealed star before unlocking:
-  lockedTeasers: [
-    "Not yet. Good things are slow, like starlight.",
-    "The photons are still crossing the void. Give them a moment.",
-    "A sealed sky keeps its secrets until the appointed hour.",
-    "Patience: even the Crab Nebula took light a few centuries to reach us.",
-    "Still in orbit. Return when the clock strikes your birthday.",
-    "The universe is aligning its mirrors for you.",
-    "A quiet little corner of space is being prepared. Almost ready."
-  ],
-
-  // --------------------------------------------------------------------------
-  // 3. SCENE 0: THE GATE (ASTRONOMY QUIZ)
+  // 2. SCENE 0: THE GATE (ASTRONOMY QUIZ)
   // --------------------------------------------------------------------------
   quiz: {
     question: "Which planet in our solar system rotates on its side with an axial tilt of nearly 98 degrees?",
@@ -54,7 +33,7 @@ const SKY_CONFIG = {
   },
 
   // --------------------------------------------------------------------------
-  // 4. SCENE 1: ARRIVAL
+  // 3. SCENE 1: ARRIVAL
   // --------------------------------------------------------------------------
   arrival: {
     headline: "Happy Birthday, {HER_NAME}.",
@@ -63,7 +42,7 @@ const SKY_CONFIG = {
   },
 
   // --------------------------------------------------------------------------
-  // 5. SCENE 2: YOUR [AGE] STARS (One per year of her life)
+  // 4. SCENE 2: YOUR [AGE] STARS (One per year of her life)
   // --------------------------------------------------------------------------
   // Each star has:
   // - year: number
@@ -219,7 +198,7 @@ const SKY_CONFIG = {
   ],
 
   // --------------------------------------------------------------------------
-  // 6. SCENE 3: LIGHT THAT LEFT BEFORE TONIGHT (Astronomical Time Travel)
+  // 5. SCENE 3: LIGHT THAT LEFT BEFORE TONIGHT (Astronomical Time Travel)
   // --------------------------------------------------------------------------
   lightTravel: [
     {
@@ -249,7 +228,7 @@ const SKY_CONFIG = {
   ],
 
   // --------------------------------------------------------------------------
-  // 7. SCENE 4: ZODIAC CONSTELLATION BLURBS (All 12 signs supported)
+  // 6. SCENE 4: ZODIAC CONSTELLATION BLURBS (All 12 signs supported)
   // --------------------------------------------------------------------------
   zodiacBlurbs: {
     Aries: "Aries: Bright, energetic, and unafraid of initiating the voyage. Tradition says you blaze first.",
@@ -267,20 +246,7 @@ const SKY_CONFIG = {
   },
 
   // --------------------------------------------------------------------------
-  // 8. SCENE 5: MAKE A WISH (Interactive Shooting Stars)
-  // --------------------------------------------------------------------------
-  wishes: {
-    instruction: "Catch a shooting star to make a wish.",
-    subtext: "It stays on your device. Only you can see it.",
-    placeholder: "Type a wish and let it sail into the dark...",
-    releaseBtn: "Release Into The Sky",
-    maxCatches: 3,
-    completionTitle: "Three wishes set loose.",
-    completionMessage: "Whatever you wished for in the quiet of this evening, may the universe make generous room for it."
-  },
-
-  // --------------------------------------------------------------------------
-  // 9. SCENE 6: THE TELESCOPE (Hidden Messages in the Deep Sky)
+  // 7. SCENE 5: THE TELESCOPE (Hidden Messages in the Deep Sky)
   // --------------------------------------------------------------------------
   telescopeSecrets: [
     {
@@ -304,7 +270,7 @@ const SKY_CONFIG = {
   ],
 
   // --------------------------------------------------------------------------
-  // 10. SCENE 7: FINAL MESSAGE
+  // 8. SCENE 6: FINAL MESSAGE
   // --------------------------------------------------------------------------
   finalMessage: {
     headline: "For {HER_NAME}",

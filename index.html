@@ -49,18 +49,9 @@
   </header>
 
   <!-- ====================================================================
-       SCENE -1: THE SEALED SKY (COUNTDOWN LOCK)
-       Active until unlockAt or ?preview=<previewKey>
+       MAIN EXPERIENCE (SCENES 0 THROUGH 6)
        ==================================================================== -->
-  <div id="lock-screen" class="lock-screen-container" role="region" aria-label="Birthday Countdown Lock">
-    <!-- Rendered dynamically by js/lock.js to prevent leaking private content -->
-  </div>
-
-  <!-- ====================================================================
-       MAIN EXPERIENCE (SCENES 0 THROUGH 7)
-       Lazy-initialized ONLY after unlock moment occurs
-       ==================================================================== -->
-  <main id="main-experience" class="main-experience-container hidden" role="main">
+  <main id="main-experience" class="main-experience-container" role="main">
     <!-- Scene 0: The Gate (Astronomy Quiz) -->
     <section id="scene-0" class="sky-scene" aria-label="Scene 0: The Gate"></section>
 
@@ -76,14 +67,11 @@
     <!-- Scene 4: Your Zodiac Constellation -->
     <section id="scene-4" class="sky-scene" aria-label="Scene 4: Zodiac Constellation"></section>
 
-    <!-- Scene 5: Make a Wish (Shooting Stars Game) -->
-    <section id="scene-5" class="sky-scene" aria-label="Scene 5: Make a Wish"></section>
+    <!-- Scene 5: The Telescope (Hidden Messages) -->
+    <section id="scene-5" class="sky-scene" aria-label="Scene 5: The Telescope"></section>
 
-    <!-- Scene 6: The Telescope (Hidden Messages) -->
-    <section id="scene-6" class="sky-scene" aria-label="Scene 6: The Telescope"></section>
-
-    <!-- Scene 7: Final Message -->
-    <section id="scene-7" class="sky-scene" aria-label="Scene 7: Final Message"></section>
+    <!-- Scene 6: Final Message -->
+    <section id="scene-6" class="sky-scene" aria-label="Scene 6: Final Message"></section>
   </main>
 
   <!-- Modular Scripts (Offline, Vanilla JS, Zero External Calls) -->
@@ -92,7 +80,6 @@
   <script src="js/starfield.js"></script>
   <script src="js/constellations.js"></script>
   <script src="js/game.js"></script>
-  <script src="js/lock.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
