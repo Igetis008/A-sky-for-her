@@ -1,0 +1,1672 @@
+/* ==========================================================================
+   A SKY FOR HER — STYLESHEET
+   Deep-space palette, celestial typography, responsive layout, accessible controls
+   ========================================================================== */
+
+:root {
+  /* Color Palette */
+  --bg-deep: #05070f;
+  --bg-indigo: #0b1021;
+  --bg-nebula: #141838;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --accent-gold: #fde047;
+  --accent-gold-soft: #fef08a;
+  --accent-cyan: #67e8f9;
+  --accent-blue: #93c5fd;
+  --accent-purple: #c084fc;
+
+  /* Glass Surfaces */
+  --card-bg: rgba(15, 23, 42, 0.72);
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-glow: rgba(99, 102, 241, 0.15);
+
+  /* Typography Stacks */
+  --font-serif: 'Cinzel', 'Playfair Display', 'Didot', 'Bodoni MT', 'Georgia', serif;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+
+  /* Transitions */
+  --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Reset & Box Sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--bg-deep);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Background Canvas */
+#sky-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Skip link for keyboard accessibility */
+.skip-nav-link {
+  position: absolute;
+  top: -60px;
+  left: 16px;
+  background: var(--accent-gold);
+  color: #000;
+  padding: 8px 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  z-index: 1000;
+  transition: top 0.2s ease;
+}
+
+.skip-nav-link:focus {
+  top: 16px;
+}
+
+/* Utilities */
+.hidden {
+  display: none !important;
+}
+
+/* Header & Celestial Navigation Bar */
+.celestial-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(5, 7, 15, 0.85) 0%, rgba(5, 7, 15, 0) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.moon-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform var(--transition-smooth), filter var(--transition-smooth);
+}
+
+.moon-icon-btn:hover {
+  transform: scale(1.15) rotate(8deg);
+  filter: drop-shadow(0 0 8px var(--accent-gold));
+}
+
+.sky-title-badge {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* Nav Progress Indicator Dots */
+.nav-dots-track {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  padding: 0;
+  transition: all var(--transition-smooth);
+}
+
+.nav-dot:hover {
+  transform: scale(1.3);
+  background: var(--accent-gold);
+}
+
+.nav-dot.active {
+  background: var(--accent-gold);
+  box-shadow: 0 0 10px var(--accent-gold);
+  transform: scale(1.35);
+}
+
+.nav-dot.visited {
+  background: var(--accent-cyan);
+}
+
+/* Sound Toggle Button */
+.audio-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text-main);
+  padding: 8px 16px;
+  border-radius: 24px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  transition: all var(--transition-smooth);
+}
+
+.audio-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: var(--accent-cyan);
+}
+
+.audio-toggle-btn.audio-active {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(253, 224, 71, 0.25);
+}
+
+/* Buttons */
+.celestial-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: 30px;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+  border: 1px solid transparent;
+}
+
+.celestial-btn:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 3px;
+}
+
+.primary-btn {
+  background: linear-gradient(135deg, rgba(253, 224, 71, 0.95) 0%, rgba(254, 240, 138, 0.85) 100%);
+  color: #0f172a;
+  box-shadow: 0 4px 20px rgba(253, 224, 71, 0.35);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(253, 224, 71, 0.55);
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-main);
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--accent-cyan);
+}
+
+.large-cta {
+  font-size: 1.1rem;
+  padding: 16px 36px;
+}
+
+/* Badges */
+.section-badge {
+  display: inline-block;
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent-gold);
+  background: rgba(253, 224, 71, 0.1);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid rgba(253, 224, 71, 0.25);
+  margin-bottom: 12px;
+}
+
+/* Modals */
+.celestial-modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 7, 15, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100;
+  padding: 20px;
+  animation: modalFadeIn 0.3s ease forwards;
+}
+
+.modal-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--card-glow);
+  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 1.8rem;
+  line-height: 1;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all var(--transition-smooth);
+}
+
+.modal-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   SCENE -1: THE SEALED SKY (COUNTDOWN LOCK)
+   ========================================================================== */
+
+.lock-screen-container {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  transition: opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lock-screen-container.lock-fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.lock-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 640px;
+}
+
+/* Sealed Star System */
+.sealed-star-system {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  margin-bottom: 28px;
+  cursor: pointer;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--transition-smooth);
+}
+
+.sealed-star-system:hover {
+  transform: scale(1.06);
+}
+
+.sealed-star-system:focus-visible {
+  outline: 2px solid var(--accent-gold);
+}
+
+.sealed-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px dashed rgba(191, 219, 254, 0.35);
+  animation: ringRotate 24s linear infinite;
+}
+
+.outer-ring {
+  inset: 0;
+}
+
+.inner-ring {
+  inset: 18px;
+  border-style: dotted;
+  border-color: rgba(253, 224, 71, 0.4);
+  animation-duration: 16s;
+  animation-direction: reverse;
+}
+
+.sealed-star-core {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(254, 240, 138, 0.95) 0%, rgba(253, 224, 71, 0.3) 55%, transparent 75%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 28px rgba(253, 224, 71, 0.4);
+  animation: starBreathe 4s ease-in-out infinite;
+}
+
+.star-sparkle {
+  color: #fff;
+  font-size: 1.4rem;
+  text-shadow: 0 0 10px var(--accent-gold);
+}
+
+/* Star Tap Pulse */
+.star-pulsing .sealed-star-core {
+  animation: starTapTwinkle 0.6s ease-out;
+}
+
+/* Final 10-second Climax */
+.star-climax .sealed-star-core {
+  box-shadow: 0 0 60px rgba(253, 224, 71, 0.85);
+  transform: scale(1.3);
+}
+
+.lock-typography {
+  margin-bottom: 32px;
+}
+
+.lock-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+  background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.lock-subtext {
+  font-size: clamp(1.0rem, 2.5vw, 1.25rem);
+  color: var(--text-muted);
+}
+
+/* Countdown Display */
+.lock-countdown {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 28px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 24px;
+}
+
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+}
+
+.unit-num {
+  font-size: clamp(1.8rem, 5.5vw, 2.8rem);
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.05em;
+}
+
+.unit-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.countdown-separator {
+  font-size: 1.8rem;
+  color: var(--text-dim);
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+
+.countdown-climax .unit-num {
+  color: var(--accent-gold);
+  text-shadow: 0 0 18px rgba(253, 224, 71, 0.8);
+  animation: climaxPulse 1s infinite alternate;
+}
+
+/* Teaser Tray */
+.lock-teaser-tray {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--accent-blue);
+  background: rgba(147, 197, 253, 0.08);
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(147, 197, 253, 0.2);
+  transition: all var(--transition-smooth);
+}
+
+.teaser-flash {
+  animation: teaserFlash 0.5s ease-out;
+}
+
+/* ==========================================================================
+   MAIN EXPERIENCE & SCENES CONTAINER
+   ========================================================================== */
+
+.main-experience-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 80px;
+  padding-bottom: 40px;
+}
+
+.sky-scene {
+  display: none;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.sky-scene.active-scene {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   SCENE 0: THE GATE (QUIZ)
+   ========================================================================== */
+
+.gate-wrapper {
+  max-width: 580px;
+  margin: 40px auto 0;
+  text-align: center;
+}
+
+.gate-star-node {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gate-star-glyph {
+  font-size: 2.2rem;
+  color: var(--accent-gold);
+  text-shadow: 0 0 20px var(--accent-gold);
+  animation: starBreathe 3.5s ease-in-out infinite;
+}
+
+.gate-star-halo {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.25) 0%, transparent 70%);
+}
+
+.star-shake {
+  animation: starShake 0.45s ease-in-out;
+}
+
+.star-unlocked .gate-star-glyph {
+  transform: scale(1.4);
+  text-shadow: 0 0 35px #ffffff;
+}
+
+.gate-eyebrow {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--accent-gold);
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.gate-question {
+  font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+  font-weight: 400;
+  line-height: 1.4;
+  margin-bottom: 28px;
+  color: #fff;
+}
+
+.gate-quiz-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.celestial-input {
+  flex: 1;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--card-border);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 28px;
+  font-size: 1rem;
+  outline: none;
+  min-height: 44px;
+  transition: all var(--transition-smooth);
+}
+
+.celestial-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 16px rgba(103, 232, 249, 0.25);
+}
+
+.quiz-feedback {
+  font-size: 0.95rem;
+  min-height: 24px;
+  transition: opacity 0.3s;
+}
+
+.quiz-feedback.error {
+  color: #fca5a5;
+}
+
+.quiz-feedback.success {
+  color: #86efac;
+}
+
+.skip-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--accent-gold);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  min-height: 44px;
+  margin-top: 8px;
+  transition: all var(--transition-smooth);
+}
+
+.skip-btn:hover {
+  background: rgba(253, 224, 71, 0.12);
+  border-color: var(--accent-gold);
+}
+
+/* ==========================================================================
+   SCENE 1: ARRIVAL
+   ========================================================================== */
+
+.arrival-wrapper {
+  max-width: 680px;
+  margin: 80px auto 0;
+  text-align: center;
+}
+
+.arrival-glyph {
+  font-size: 1.2rem;
+  letter-spacing: 0.4em;
+  color: var(--accent-gold);
+  margin-bottom: 16px;
+}
+
+.arrival-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  background: linear-gradient(180deg, #ffffff 40%, #cbd5e1 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.arrival-subtext {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 40px;
+}
+
+/* ==========================================================================
+   SCENE 2: YOUR [AGE] STARS (CORE INTERACTION)
+   ========================================================================== */
+
+.age-stars-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stars-header {
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 24px;
+}
+
+.stars-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+
+.stars-subtitle {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-bottom: 14px;
+}
+
+.stars-progress-pill {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 6px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: var(--accent-cyan);
+}
+
+/* Star Viewport */
+.constellation-viewport {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  height: 520px;
+  margin: 0 auto 28px;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.constellation-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.star-nodes-container {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+/* Star Node Button */
+.star-node {
+  position: absolute;
+  width: 38px;
+  height: 38px;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  min-width: 44px;
+  min-height: 44px;
+  transition: transform var(--transition-smooth);
+}
+
+.star-node:hover {
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+.star-halo {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.4) 0%, transparent 70%);
+  transition: all var(--transition-smooth);
+}
+
+.star-core {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff;
+  transition: all var(--transition-smooth);
+}
+
+.star-number {
+  position: absolute;
+  top: -16px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+}
+
+.star-node:hover .star-number {
+  opacity: 1;
+}
+
+/* Lit state when discovered */
+.star-node.lit .star-core {
+  background: var(--accent-gold);
+  box-shadow: 0 0 16px var(--accent-gold);
+}
+
+.star-node.lit .star-halo {
+  background: radial-gradient(circle, rgba(253, 224, 71, 0.6) 0%, transparent 75%);
+}
+
+/* Star detail modal */
+.star-detail-card {
+  text-align: left;
+}
+
+.card-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  padding: 4px 10px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.badge-compliment {
+  background: rgba(253, 224, 71, 0.15);
+  color: var(--accent-gold);
+  border: 1px solid rgba(253, 224, 71, 0.3);
+}
+
+.badge-humor {
+  background: rgba(103, 232, 249, 0.15);
+  color: var(--accent-cyan);
+  border: 1px solid rgba(103, 232, 249, 0.3);
+}
+
+.badge-fact {
+  background: rgba(192, 132, 252, 0.15);
+  color: var(--accent-purple);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+}
+
+.badge-wish {
+  background: rgba(244, 114, 182, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(244, 114, 182, 0.3);
+}
+
+.star-detail-card .modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.star-detail-card .modal-body {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.card-footer-starlight {
+  text-align: center;
+  color: var(--accent-gold);
+  letter-spacing: 0.3em;
+}
+
+.stars-footer-action {
+  text-align: center;
+  animation: modalFadeIn 0.5s ease-out;
+}
+
+.complete-message {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--accent-gold);
+  margin-bottom: 14px;
+}
+
+/* ==========================================================================
+   SCENE 3: LIGHT THAT LEFT BEFORE TONIGHT
+   ========================================================================== */
+
+.ancient-light-wrapper {
+  text-align: center;
+}
+
+.scene-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.scene-subtext {
+  max-width: 650px;
+  margin: 0 auto 36px;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+}
+
+.light-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.light-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 28px;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-smooth), border-color var(--transition-smooth);
+}
+
+.light-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.featured-light-card {
+  border-color: rgba(253, 224, 71, 0.35);
+  box-shadow: 0 0 24px rgba(253, 224, 71, 0.1);
+}
+
+.light-star-name {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+  color: #fff;
+}
+
+.light-stat {
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  color: var(--accent-cyan);
+  margin-bottom: 14px;
+}
+
+.light-desc {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.light-calc-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #f1f5f9;
+  border-left: 3px solid var(--accent-gold);
+}
+
+/* ==========================================================================
+   SCENE 4: YOUR ZODIAC CONSTELLATION
+   ========================================================================== */
+
+.zodiac-wrapper {
+  text-align: center;
+}
+
+.zodiac-dates {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent-cyan);
+  margin-bottom: 24px;
+}
+
+.zodiac-canvas-container {
+  width: 100%;
+  max-width: 640px;
+  height: 380px;
+  margin: 0 auto 28px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid var(--card-border);
+  border-radius: 24px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.zodiac-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.zodiac-blurb-box {
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+
+.zodiac-blurb-text {
+  font-size: 1.15rem;
+  font-style: italic;
+  color: #f8fafc;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.zodiac-disclaimer {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   SCENE 5: MAKE A WISH (SHOOTING STAR GAME)
+   ========================================================================== */
+
+.wish-scene-wrapper {
+  text-align: center;
+}
+
+.wish-header {
+  margin-bottom: 24px;
+}
+
+.wish-game-container {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  height: 480px;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid var(--card-border);
+  overflow: hidden;
+}
+
+.wish-canvas-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  z-index: 5;
+}
+
+.wish-banner {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+  text-align: center;
+}
+
+.wish-count-pill {
+  display: inline-block;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid var(--card-border);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  color: var(--accent-gold);
+}
+
+.wish-subtext {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.card-starlight-glyph {
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+}
+
+.modal-whisper {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+.wish-textarea {
+  width: 100%;
+  height: 110px;
+  background: rgba(5, 7, 15, 0.6);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  color: #fff;
+  padding: 14px;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: none;
+  outline: none;
+  margin-bottom: 20px;
+}
+
+.wish-textarea:focus {
+  border-color: var(--accent-cyan);
+}
+
+.floating-wish-text {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent-gold);
+  font-style: italic;
+  font-size: 1.1rem;
+  pointer-events: none;
+  animation: wishAscend 2.8s ease-out forwards;
+  z-index: 15;
+}
+
+.wish-completion-card {
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 7, 15, 0.88);
+  backdrop-filter: blur(12px);
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+  animation: modalFadeIn 0.6s ease-out;
+}
+
+.completion-glyph {
+  font-size: 2.2rem;
+  margin-bottom: 16px;
+}
+
+.completion-title {
+  font-family: var(--font-serif);
+  font-size: 1.8rem;
+  margin-bottom: 12px;
+  color: #fff;
+}
+
+.completion-text {
+  max-width: 500px;
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 28px;
+}
+
+/* ==========================================================================
+   SCENE 6: THE TELESCOPE (HIDDEN OBSERVATIONS)
+   ========================================================================== */
+
+.telescope-scene-wrapper {
+  text-align: center;
+}
+
+.telescope-header {
+  margin-bottom: 24px;
+}
+
+.telescope-container {
+  position: relative;
+  width: 100%;
+  max-width: 880px;
+  height: 500px;
+  margin: 0 auto;
+  border-radius: 24px;
+  background: rgba(5, 7, 15, 0.85);
+  border: 1px solid var(--card-border);
+  overflow: hidden;
+  cursor: none;
+}
+
+/* Telescope Lens Reticle */
+.telescope-lens {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 180px;
+  height: 180px;
+  margin-left: -90px;
+  margin-top: -90px;
+  border-radius: 50%;
+  border: 2px solid rgba(253, 224, 71, 0.65);
+  box-shadow: 0 0 0 9999px rgba(5, 7, 15, 0.6), 0 0 30px rgba(253, 224, 71, 0.35);
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.2s ease;
+}
+
+.lens-crosshair-h {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  right: 10px;
+  height: 1px;
+  background: rgba(253, 224, 71, 0.35);
+}
+
+.lens-crosshair-v {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  bottom: 10px;
+  width: 1px;
+  background: rgba(253, 224, 71, 0.35);
+}
+
+.lens-ring {
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  border: 1px dashed rgba(103, 232, 249, 0.4);
+}
+
+.lens-reticle-degrees {
+  position: absolute;
+  bottom: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--accent-gold);
+}
+
+.telescope-tracker {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  z-index: 15;
+  text-align: left;
+  pointer-events: none;
+}
+
+.tracker-header {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+}
+
+.tracker-status {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+}
+
+.tracker-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  max-width: 280px;
+  margin-top: 4px;
+}
+
+/* Deep Sky Secret Hotspots */
+.deep-sky-secret {
+  position: absolute;
+  width: 260px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(103, 232, 249, 0.2);
+  transform: translate(-50%, -50%);
+  opacity: 0.03;
+  /* invisible until lens sweeps over */
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 5;
+  text-align: left;
+}
+
+.deep-sky-secret.revealed {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.secret-coords {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--accent-cyan);
+  margin-bottom: 4px;
+}
+
+.secret-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.secret-body {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+.telescope-complete-cta {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  animation: modalFadeIn 0.4s ease;
+}
+
+/* ==========================================================================
+   SCENE 7: FINAL MESSAGE
+   ========================================================================== */
+
+.final-message-wrapper {
+  max-width: 680px;
+  margin: 20px auto 0;
+  text-align: center;
+}
+
+.final-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 28px;
+  padding: 44px 36px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 35px var(--card-glow);
+}
+
+.final-glyph {
+  font-size: 2.0rem;
+  margin-bottom: 16px;
+}
+
+.final-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 400;
+  margin-bottom: 28px;
+  color: #fff;
+}
+
+.final-body {
+  text-align: left;
+  margin-bottom: 36px;
+}
+
+.final-paragraph {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #e2e8f0;
+  margin-bottom: 20px;
+}
+
+.final-signature {
+  text-align: left;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 24px;
+  margin-bottom: 36px;
+}
+
+.sig-signoff {
+  font-size: 1rem;
+  color: var(--text-muted);
+}
+
+.sig-name {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  color: var(--accent-gold);
+  margin-top: 4px;
+}
+
+.final-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.reply-btn {
+  background: linear-gradient(135deg, rgba(103, 232, 249, 0.2) 0%, rgba(147, 197, 253, 0.2) 100%);
+  border: 1px solid var(--accent-cyan);
+  color: #fff;
+}
+
+.reply-btn:hover {
+  background: linear-gradient(135deg, rgba(103, 232, 249, 0.35) 0%, rgba(147, 197, 253, 0.35) 100%);
+  box-shadow: 0 0 20px rgba(103, 232, 249, 0.35);
+}
+
+.replay-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-muted);
+}
+
+.replay-btn:hover {
+  color: #fff;
+  border-color: #fff;
+}
+
+/* ==========================================================================
+   EASTER EGG TOAST
+   ========================================================================== */
+
+.celestial-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--accent-gold);
+  color: #fff;
+  padding: 12px 28px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  letter-spacing: 0.05em;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(253, 224, 71, 0.3);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+
+.celestial-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==========================================================================
+   ANIMATIONS & KEYFRAMES
+   ========================================================================== */
+
+@keyframes ringRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes starBreathe {
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+    filter: drop-shadow(0 0 12px var(--accent-gold));
+  }
+}
+
+@keyframes starTapTwinkle {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.4);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes climaxPulse {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes teaserFlash {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.04);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes starShake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-8px);
+  }
+
+  75% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes wishAscend {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-140px);
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES (Mobile <= 768px, <= 360px)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .celestial-header {
+    padding: 0 14px;
+    height: 56px;
+  }
+
+  .sky-title-badge {
+    display: none;
+  }
+
+  .audio-label {
+    display: none;
+  }
+
+  .audio-toggle-btn {
+    padding: 8px 12px;
+  }
+
+  .constellation-viewport {
+    height: 420px;
+  }
+
+  .wish-game-container {
+    height: 400px;
+  }
+
+  .telescope-container {
+    height: 420px;
+    cursor: default;
+  }
+
+  .telescope-lens {
+    width: 140px;
+    height: 140px;
+    margin-left: -70px;
+    margin-top: -70px;
+  }
+
+  .final-card {
+    padding: 32px 20px;
+  }
+
+  .input-row {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .lock-countdown {
+    padding: 12px 14px;
+    gap: 4px;
+  }
+
+  .countdown-unit {
+    min-width: 38px;
+  }
+
+  .unit-num {
+    font-size: 1.5rem;
+  }
+
+  .unit-label {
+    font-size: 0.55rem;
+  }
+
+  .constellation-viewport {
+    height: 360px;
+  }
+
+  .star-node {
+    width: 32px;
+    height: 32px;
+  }
+
+  .modal-card {
+    padding: 24px 16px;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: PREFERS-REDUCED-MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .sealed-ring {
+    animation: none !important;
+  }
+
+  .sealed-star-core {
+    animation: none !important;
+  }
+
+  .countdown-climax .unit-num {
+    animation: none !important;
+  }
+}

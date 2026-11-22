@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="A private interactive night sky planetarium built for your birthday.">
+  <meta name="theme-color" content="#05070f">
+  <title>A Sky For You</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Accessible Skip Link -->
+  <a href="#main-experience" class="skip-nav-link">Skip to starlight content</a>
+
+  <!-- Parallax Canvas Background -->
+  <canvas id="sky-canvas" aria-hidden="true"></canvas>
+
+  <!-- Top Navigation Bar & Accessible Controls -->
+  <header class="celestial-header" role="banner">
+    <div class="header-left">
+      <button 
+        id="celestial-moon-icon" 
+        class="moon-icon-btn" 
+        aria-label="Celestial moon. Long press for an astronomical surprise."
+        title="Celestial Moon (Hold for a cosmic surprise)"
+      >
+        🌙
+      </button>
+      <span class="sky-title-badge">A Sky For Her</span>
+    </div>
+
+    <!-- Scene Progress Dots Track -->
+    <nav class="nav-dots-track" id="nav-progress-dots" aria-label="Constellation scene progression">
+      <!-- Generated dynamically based on scenes -->
+    </nav>
+
+    <div class="header-right">
+      <!-- Web Audio Sound Toggle (Off by default) -->
+      <button 
+        id="audio-toggle-btn" 
+        class="audio-toggle-btn" 
+        aria-pressed="false"
+        aria-label="Toggle ambient starlight sound"
+      >
+        <span class="audio-icon" aria-hidden="true">🔇</span>
+        <span class="audio-label">Sound: Off</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       SCENE -1: THE SEALED SKY (COUNTDOWN LOCK)
+       Active until unlockAt or ?preview=<previewKey>
+       ==================================================================== -->
+  <div id="lock-screen" class="lock-screen-container" role="region" aria-label="Birthday Countdown Lock">
+    <!-- Rendered dynamically by js/lock.js to prevent leaking private content -->
+  </div>
+
+  <!-- ====================================================================
+       MAIN EXPERIENCE (SCENES 0 THROUGH 7)
+       Lazy-initialized ONLY after unlock moment occurs
+       ==================================================================== -->
+  <main id="main-experience" class="main-experience-container hidden" role="main">
+    <!-- Scene 0: The Gate (Astronomy Quiz) -->
+    <section id="scene-0" class="sky-scene" aria-label="Scene 0: The Gate"></section>
+
+    <!-- Scene 1: Arrival -->
+    <section id="scene-1" class="sky-scene" aria-label="Scene 1: Arrival"></section>
+
+    <!-- Scene 2: Your [AGE] Stars -->
+    <section id="scene-2" class="sky-scene" aria-label="Scene 2: Your Stars"></section>
+
+    <!-- Scene 3: Light That Left Before Tonight -->
+    <section id="scene-3" class="sky-scene" aria-label="Scene 3: Ancient Light"></section>
+
+    <!-- Scene 4: Your Zodiac Constellation -->
+    <section id="scene-4" class="sky-scene" aria-label="Scene 4: Zodiac Constellation"></section>
+
+    <!-- Scene 5: Make a Wish (Shooting Stars Game) -->
+    <section id="scene-5" class="sky-scene" aria-label="Scene 5: Make a Wish"></section>
+
+    <!-- Scene 6: The Telescope (Hidden Messages) -->
+    <section id="scene-6" class="sky-scene" aria-label="Scene 6: The Telescope"></section>
+
+    <!-- Scene 7: Final Message -->
+    <section id="scene-7" class="sky-scene" aria-label="Scene 7: Final Message"></section>
+  </main>
+
+  <!-- Modular Scripts (Offline, Vanilla JS, Zero External Calls) -->
+  <script src="js/content.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/starfield.js"></script>
+  <script src="js/constellations.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/lock.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
